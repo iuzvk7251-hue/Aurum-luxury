@@ -1,0 +1,6 @@
+{
+  "name": "Aurum Luxe",
+  "description": "Premium US-style e-commerce store and multi-supplier dropshipping admin hub in white, black, and gold.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

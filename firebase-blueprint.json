@@ -1,0 +1,219 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated shopper or admin profile with isolated PII.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string", "description": "Full display name" },
+        "email": { "type": "string", "description": "Verified email address" },
+        "phone": { "type": "string", "description": "Contact phone or WhatsApp number" },
+        "shippingAddress": { "type": "string", "description": "Default US/International shipping address" },
+        "role": { "type": "string", "enum": ["customer", "admin"], "description": "Access role" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update" }
+      },
+      "required": ["userId", "displayName", "email", "role", "createdAt", "updatedAt"]
+    },
+    "CartItem": {
+      "title": "CartItem",
+      "description": "Persisted item in a user's shopping cart.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "quantity": { "type": "integer" },
+        "imageKey": { "type": "string" },
+        "selectedVariant": { "type": "string" },
+        "printOnDemandNote": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "title", "price", "quantity", "imageKey", "createdAt", "updatedAt"]
+    },
+    "WishlistItem": {
+      "title": "WishlistItem",
+      "description": "Saved product in a user's wishlist.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "productId": { "type": "string" },
+        "title": { "type": "string" },
+        "price": { "type": "number" },
+        "imageKey": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "productId", "title", "price", "imageKey", "createdAt", "updatedAt"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Store catalog product synced from internal or dropshipping suppliers.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "price": { "type": "number" },
+        "compareAtPrice": { "type": "number" },
+        "stock": { "type": "integer" },
+        "imageKey": { "type": "string" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "integer" },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "supplierTag": { "type": "string" },
+        "shippingEstimate": { "type": "string" },
+        "isBestSeller": { "type": "boolean" },
+        "supportsPrintOnDemand": { "type": "boolean" },
+        "supportsSampleOrder": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "category", "price", "stock", "imageKey", "supplierId", "supplierName", "createdAt", "updatedAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "Customer order with payment method, auto-forwarding status, and tracking.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerEmail": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "shippingAddress": { "type": "string" },
+        "itemsSummary": { "type": "string" },
+        "itemCount": { "type": "integer" },
+        "subtotal": { "type": "number" },
+        "shippingCost": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["Card (Visa / MasterCard)", "PayPal", "Cash on Delivery"] },
+        "paymentStatus": { "type": "string", "enum": ["Paid", "Pending COD", "Refunded"] },
+        "orderStatus": { "type": "string", "enum": ["Pending", "Forwarded to Supplier", "Shipped", "Delivered", "Cancelled"] },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "forwardingStatus": { "type": "string", "enum": ["Queued", "Forwarded", "Dispatched", "Delivered"] },
+        "trackingNumber": { "type": "string" },
+        "carrier": { "type": "string" },
+        "notificationSent": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "customerName", "customerEmail", "shippingAddress", "itemsSummary", "itemCount", "totalAmount", "paymentMethod", "paymentStatus", "orderStatus", "supplierId", "supplierName", "forwardingStatus", "createdAt", "updatedAt"]
+    },
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Dropshipping supplier integration configuration.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "code": { "type": "string" },
+        "apiKeyMasked": { "type": "string" },
+        "isConnected": { "type": "boolean" },
+        "autoImport": { "type": "boolean" },
+        "autoPriceSync": { "type": "boolean" },
+        "autoStockSync": { "type": "boolean" },
+        "autoOrderForwarding": { "type": "boolean" },
+        "autoTrackingSync": { "type": "boolean" },
+        "specialNote": { "type": "string" },
+        "importedProductCount": { "type": "integer" },
+        "isCustom": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "code", "isConnected", "autoImport", "autoPriceSync", "autoStockSync", "autoOrderForwarding", "autoTrackingSync", "createdAt", "updatedAt"]
+    },
+    "SourcingRequest": {
+      "title": "SourcingRequest",
+      "description": "CJ Sourcing Request or Spocket Sample Order submitted by user/merchant.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "supplierId": { "type": "string" },
+        "supplierName": { "type": "string" },
+        "requestType": { "type": "string", "enum": ["Sourcing Request", "Sample Order", "Print on Demand"] },
+        "productTitle": { "type": "string" },
+        "notes": { "type": "string" },
+        "status": { "type": "string", "enum": ["Submitted", "In Review", "Approved", "Shipped"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "supplierId", "supplierName", "requestType", "productTitle", "status", "createdAt", "updatedAt"]
+    },
+    "SupportTicket": {
+      "title": "SupportTicket",
+      "description": "Contact Us inquiry submitted from the storefront.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "subject": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string", "enum": ["Open", "Resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "email", "subject", "message", "status", "createdAt", "updatedAt"]
+    },
+    "ProductReview": {
+      "title": "ProductReview",
+      "description": "Verified customer review on a product.",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string" },
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["productId", "userId", "authorName", "rating", "comment", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user account profile containing PII."
+    },
+    "/users/{userId}/cart/{cartItemId}": {
+      "schema": { "$ref": "#/entities/CartItem" },
+      "description": "User shopping cart subcollection."
+    },
+    "/users/{userId}/wishlist/{productId}": {
+      "schema": { "$ref": "#/entities/WishlistItem" },
+      "description": "User saved wishlist subcollection."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Store product catalog."
+    },
+    "/orders/{orderId}": {
+      "schema": { "$ref": "#/entities/Order" },
+      "description": "Customer orders and dropshipping fulfillment tracking."
+    },
+    "/suppliers/{supplierId}": {
+      "schema": { "$ref": "#/entities/Supplier" },
+      "description": "Admin-only dropshipping supplier API connections."
+    },
+    "/sourcing_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/SourcingRequest" },
+      "description": "Sourcing requests and sample orders."
+    },
+    "/support_tickets/{ticketId}": {
+      "schema": { "$ref": "#/entities/SupportTicket" },
+      "description": "Customer support inquiries."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/ProductReview" },
+      "description": "Product reviews."
+    }
+  }
+}
